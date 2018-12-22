@@ -17,10 +17,15 @@ background-color: black;
   margin-right: 600px;
   font-family: Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif;
   color: white;
-  border: 5px solid black;
+  border: 5px solid gray;
+  
   width:  100%;
   height: 80%;
-  background: url('https://d2v9y0dukr6mq2.cloudfront.net/video/thumbnail/rN0W64K4ipau8gxv/dark-gray-background-soft-fifteen-shades-of-grey-smooth-background-with-the-addition-of-a-bit-of-noise_seqlug99tx_thumbnail-full01.png');
+  background: url('https://implyingrigged.info/w/images/thumb/c/c1/F_logo.png/250px-F_logo.png');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center; 
+  background-position-y: 300px
 
 }
 .col-centered{
@@ -32,23 +37,64 @@ background-color: black;
     width: 100%;
 }
 #the-file-input{
-    border: 5px solid white;
+    color: #999966;
+    border: 5px solid #999966;
     display: inline-block;
     
 }
+.history{
+   
+}
 
+h3{
+    font-style: italic;
+    color: white;
+}
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script>
-
+var played = [];
+var playednames = [];
+var test2
+var test
+var names
+var names2
+var hist
+var histnames
 function dropHandler(ev) {
         $("#myFrame").show()
         ev.preventDefault();
         var file = ev.dataTransfer.items[0].getAsFile();
+        var filename = ev.dataTransfer.files[0].name;
+        console.log(filename);
         url = URL.createObjectURL(file)
         document.getElementById("myFrame").src = url;
-        $("#drop_zone").remove()
-        $("#the-file-input").remove();
+        played.push(url);
+        playednames.push(filename);
+        $("#the-file-input").hide();
+        $("#drop_zone").hide()
+        var ee = $("<button>")
+        ee.text(filename);                    
+        ee.attr("filename", file);
+        ee.attr("url", url);
+        ee.addClass("history");
+        ee.addClass("btn btn-primary");
+            
+            $("#drop_zone").append("<br>")
+
+
+        $("#drop_zone").append(ee)
+
+        $(".history").on("click", function () {
+            thisurl = $(this).attr("url");
+            document.getElementById("myFrame").src = thisurl;
+            $("#myFrame").show();
+            $("#drop_zone").hide()
+            $("#the-file-input").hide();
+
+            });
+save();
+console.log(played);
 }
 
 function dragOverHandler(ev) {
@@ -57,29 +103,159 @@ function dragOverHandler(ev) {
 }
 
 $("#the-file-input").change(function(event) {
+    
         $("#myFrame").show();
         var file = this.files[0].name;
         url = URL.createObjectURL(this.files[0])
         document.getElementById("myFrame").src = url;
         console.log(file);
-        $("#drop_zone").remove()
-        $("#the-file-input").remove();
+        $("#drop_zone").hide()
+        $("#the-file-input").hide();
+        played.push(url);
+        playednames.push(file);
+        var ee = $("<button>")
+        ee.text(file);                    
+        ee.attr("filename", file);
+        ee.attr("url", url);
+        ee.addClass("history");
+        ee.addClass("btn btn-primary");
+        if(played.length % 5){
+            
+            $("#drop_zone").append("<br>")
+        }
+        else{
+            
+        }
+        $("#drop_zone").append(ee)
+
+        $(".history").on("click", function () {
+            thisurl = $(this).attr("url");
+            document.getElementById("myFrame").src = thisurl;
+            $("#myFrame").show();
+            $("#drop_zone").hide()
+            $("#the-file-input").hide();
+
+            });
+save();
 
 });
 function hiding(){
     $("#myFrame").hide();
 }
+function reset(){
+    $("#myFrame").hide();
+    $("#drop_zone").show()
+    $("#the-file-input").show();
+    console.log(played);
+}
+function clear(){
+    console.log('t');
+    localStorage.clear();
+    localStorage.setItem("array", "");
+    localStorage.setItem('array2', '');
+}
+document.addEventListener('keydown', (event) => {
+        x = event.key;
+        
+        if(x == "Control"){
+            reset();
+        }
+}, false);
+function render(){
+    save()
+    for(i = 0; i < hist.length; i++){
+        var ee = $("<button>")
+        ee.text(histnames[i]);                    
+        ee.attr("filename", histnames[i]);
+        ee.attr("url", hist[i]);
+        ee.addClass("history");
+        if(hist.length % 5){
+            
+            $("#drop_zone").append("<br>")
+        }
+        else{
+            
+        }
+        $("#drop_zone").append(ee)
+
+    }
+
+    $(".history").on("click", function () {
+            thisurl = $(this).attr("url");
+            document.getElementById("myFrame").src = thisurl;
+            $("#myFrame").show();
+            $("#drop_zone").hide()
+            $("#the-file-input").hide();
+
+            });
+    
+}
+function save(){
+     names = localStorage.getItem('array2')
+     test = localStorage.getItem('array')        
+    test = test.concat(",");
+     test2 = test.concat(JSON.stringify(played));
+    test2 = test2.replace(/[[\]]/g,'');
+    test2 = test2.replace(/['"]+/g, '')
+    console.log(test2);
+    localStorage.setItem("array", test2);
+    played = [];
+
+
+
+    names = names.concat(",");
+     names2 = names.concat(JSON.stringify(playednames));
+    names2 = names2.replace(/[[\]]/g,'');
+    names2 = names2.replace(/['"]+/g, '')
+    console.log(names2);
+    localStorage.setItem("array2", names2);
+    playednames = []
+
+
+    hist = test2.split(",")
+    hist = hist.filter(function (el) {
+                        return el != "";
+                        });
+                        hist = hist.filter(function (el) {
+                        return el != null;
+                        });
+                        hist = hist.filter(function (el) {
+                        return el != undefined;
+                        });
+                        console.log(hist);
+                     
+    histnames = names2.split(",")
+    histnames = histnames.filter(function (el) {
+                        return el != "";
+                        });
+                        histnames = histnames.filter(function (el) {
+                        return el != null;
+                        });
+                        histnames = histnames.filter(function (el) {
+                        return el != undefined;
+                        });
+                        console.log(histnames);
+                       
+
+
+                       
+                }
+
 
 </script>
     </head>
-    <body onload = "hiding()">
+    <body onload = "hiding(); ">
         <div class = "row">
                 <div class="col-centered">
                     <div id="drop_zone" ondrop="dropHandler(event);" ondragover="dragOverHandler(event);">
                     <h1> <center>Drag and drop a file</center></h1>
+                    <h3><center>Press control to reset</center></h3>
+                    <!-- <center><button type="button" onclick="clear(); return false;">Clear / iniate history?</button></center> -->
+                    
           </div>
         </div>
     </div>
+    
           
         <OBJECT classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0" WIDTH="100%" HEIGHT="100%" id="MyLink" ALIGN="">
         <PARAM NAME=movie VALUE="" id ="myLink"> <PARAM NAME=quality VALUE=high>  <EMBED id="myFrame" quality=high WIDTH="100%" HEIGHT="100%" ALIGN="" TYPE="application/x-shockwave-flash" PLUGINSPAGE="http://www.macromedia.com/go/getflashplayer"></EMBED> </OBJECT>
