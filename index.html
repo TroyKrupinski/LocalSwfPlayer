@@ -1,0 +1,88 @@
+
+<html>
+    <head>
+           
+            <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+            <div class = "row">
+                <div class = "col-centered">
+                    <input id="the-file-input" type="file">
+                </div>
+            </div>
+
+        <style>
+        body{
+background-color: black;
+ }
+        #drop_zone {
+  margin-right: 600px;
+  font-family: Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif;
+  color: white;
+  border: 5px solid black;
+  width:  100%;
+  height: 80%;
+  background: url('https://d2v9y0dukr6mq2.cloudfront.net/video/thumbnail/rN0W64K4ipau8gxv/dark-gray-background-soft-fifteen-shades-of-grey-smooth-background-with-the-addition-of-a-bit-of-noise_seqlug99tx_thumbnail-full01.png');
+
+}
+.col-centered{
+    float: none;
+    margin: 0 auto;
+}
+#myFrame{
+    height: 100%;
+    width: 100%;
+}
+#the-file-input{
+    border: 5px solid white;
+    display: inline-block;
+    
+}
+
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+
+function dropHandler(ev) {
+        $("#myFrame").show()
+        ev.preventDefault();
+        $("#drop_zone").remove()
+        var file = ev.dataTransfer.items[0].getAsFile();
+        url = URL.createObjectURL(file)
+        document.getElementById("myFrame").src = url;
+}
+
+function dragOverHandler(ev) {
+        console.log('File(s) in drop zone'); 
+        ev.preventDefault();
+}
+
+$("#the-file-input").change(function(event) {
+        $("#myFrame").show();
+        var file = this.files[0].name;
+        url = URL.createObjectURL(this.files[0])
+        document.getElementById("myFrame").src = url;
+        console.log(file);
+        $("#drop_zone").remove()
+        $("#the-file-input").remove();
+
+});
+function hiding(){
+    $("#myFrame").hide();
+}
+
+</script>
+    </head>
+    <body onload = "hiding()">
+        <div class = "row">
+                <div class="col-centered">
+                    <div id="drop_zone" ondrop="dropHandler(event);" ondragover="dragOverHandler(event);">
+                    <h1> <center>Drag and drop a file</center></h1>
+          </div>
+        </div>
+    </div>
+          
+        <OBJECT classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0" WIDTH="100%" HEIGHT="100%" id="MyLink" ALIGN="">
+        <PARAM NAME=movie VALUE="" id ="myLink"> <PARAM NAME=quality VALUE=high>  <EMBED id="myFrame" quality=high WIDTH="100%" HEIGHT="100%" ALIGN="" TYPE="application/x-shockwave-flash" PLUGINSPAGE="http://www.macromedia.com/go/getflashplayer"></EMBED> </OBJECT>
+                
+
+    </body>
+</html>
