@@ -44,10 +44,11 @@ background-color: black;
 function dropHandler(ev) {
         $("#myFrame").show()
         ev.preventDefault();
-        $("#drop_zone").remove()
         var file = ev.dataTransfer.items[0].getAsFile();
         url = URL.createObjectURL(file)
         document.getElementById("myFrame").src = url;
+        $("#drop_zone").remove()
+        $("#the-file-input").remove();
 }
 
 function dragOverHandler(ev) {
